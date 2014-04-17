@@ -1,0 +1,4 @@
+RewriteEngine On
+
+RewriteCond $1 ^$
+RewriteRule ^(.*)$ %{REQUEST_URI}/public/ [R,L]

@@ -52,12 +52,12 @@ class Status
      */
     public function getStatusInfo()
     {
-        return [
+        return array(
             'opcache_enabled'     => $this->statusData['opcache_enabled'],
             'cache_full'          => $this->statusData['cache_full'],
             'restart_pending'     => $this->statusData['restart_pending'],
             'restart_in_progress' => $this->statusData['restart_in_progress'],
-        ];
+        );
     }
 
     /**
@@ -69,12 +69,12 @@ class Status
     {
         $memory = $this->statusData['memory_usage'];
 
-        return [
+        return array(
             'used_memory'               => $this->byteFormatter->format($memory['used_memory']),
             'free_memory'               => $this->byteFormatter->format($memory['free_memory']),
             'wasted_memory'             => $this->byteFormatter->format($memory['wasted_memory']),
             'current_wasted_percentage' => round($memory['current_wasted_percentage'], 2) . '%',
-        ];
+        );
     }
 
     /**
@@ -86,20 +86,20 @@ class Status
     {
         $memory = $this->statusData['memory_usage'];
 
-        return json_encode([
-            [
+        return json_encode(array(
+            array(
                 'value' => $memory['wasted_memory'],
                 'color' => '#e0642e',
-            ],
-            [
+            ),
+            array(
                 'value' => $memory['used_memory'],
                 'color' => '#2e97e0',
-            ],
-            [
+            ),
+            array(
                 'value' => $memory['free_memory'],
                 'color' => '#bce02e',
-            ],
-        ]);
+            ),
+        ));
     }
 
     /**
@@ -111,7 +111,7 @@ class Status
     {
         $stats = $this->statusData['opcache_statistics'];
 
-        return [
+        return array(
             'num_cached_scripts'   => $stats['num_cached_scripts'],
             'num_cached_keys'      => $stats['num_cached_keys'],
             'max_cached_keys'      => $stats['max_cached_keys'],
@@ -120,12 +120,12 @@ class Status
             'blacklist_misses'     => $stats['blacklist_misses'],
             'blacklist_miss_ratio' => round($stats['blacklist_miss_ratio'], 2),
             'opcache_hit_rate'     => round($stats['opcache_hit_rate'], 2) . '%',
-            'start_time'           => (new \DateTime('@' . $stats['start_time']))->format('H:i:s d-m-Y'),
-            'last_restart_time'    => $stats['last_restart_time'] ? (new \DateTime('@' . $stats['last_restart_time']))->format('H:i:s d-m-Y') : null,
+            'start_time'           => date_format(date_create('@' . $stats['start_time']), 'H:i:s d-m-Y'),
+            'last_restart_time'    => $stats['last_restart_time'] ? date_format(date_create('@' . $stats['last_restart_time']), 'H:i:s d-m-Y') : null,
             'oom_restarts'         => $stats['oom_restarts'],
             'hash_restarts'        => $stats['hash_restarts'],
             'manual_restarts'      => $stats['manual_restarts'],
-        ];
+        );
     }
 
     /**
@@ -137,20 +137,20 @@ class Status
     {
         $stats = $this->statusData['opcache_statistics'];
 
-        return json_encode([
-            [
+        return json_encode(array(
+            array(
                 'value' => $stats['num_cached_keys'] - $stats['num_cached_scripts'],
                 'color' => '#e0642e',
-            ],
-            [
+            ),
+            array(
                 'value' => $stats['num_cached_scripts'],
                 'color' => '#2e97e0',
-            ],
-            [
+            ),
+            array(
                 'value' => $stats['max_cached_keys'] - $stats['num_cached_keys'],
                 'color' => '#bce02e',
-            ],
-        ]);
+            ),
+        ));
     }
 
     /**
@@ -162,20 +162,20 @@ class Status
     {
         $stats = $this->statusData['opcache_statistics'];
 
-        return json_encode([
-            [
+        return json_encode(array(
+            array(
                 'value' => $stats['misses'],
                 'color' => '#e0642e',
-            ],
-            [
+            ),
+            array(
                 'value' => $stats['blacklist_misses'],
                 'color' => '#2e97e0',
-            ],
-            [
+            ),
+            array(
                 'value' => $stats['hits'],
                 'color' => '#bce02e',
-            ],
-        ]);
+            ),
+        ));
     }
 
     /**
@@ -186,23 +186,23 @@ class Status
     public function getCachedScripts()
     {
         if (!isset($this->statusData['scripts'])) {
-            return [];
+            return array();
         }
 
-        $scripts = [];
+        $scripts = array();
 
         foreach ($this->statusData['scripts'] as $script) {
             if ($script['timestamp'] === 0) {
                 continue;
             }
 
-            $scripts[] = [
+            $scripts[] = array(
                 'full_path'           => $script['full_path'],
                 'hits'                => $script['hits'],
                 'memory_consumption'  => $this->byteFormatter->format($script['memory_consumption']),
-                'last_used_timestamp' => (new \DateTime('@' . $script['last_used_timestamp']))->format('H:i:s d-m-Y'),
-                'timestamp'           => (new \DateTime('@' . $script['timestamp']))->format('H:i:s d-m-Y'),
-            ];
+                'last_used_timestamp' => date_format(date_create('@' . $script['last_used_timestamp']), 'H:i:s d-m-Y'),
+                'timestamp'           => date_format(date_create('@' . $script['timestamp']), 'H:i:s d-m-Y'),
+            );
         }
 
         return $scripts;

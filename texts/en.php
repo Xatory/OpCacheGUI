@@ -1,6 +1,6 @@
 <?php
 
-$texts = [
+$texts = array(
     'menu.status'                                           => 'Status',
     'menu.config'                                           => 'Configuration',
     'menu.scripts'                                          => 'Cached scripts',
@@ -115,4 +115,4 @@ $texts = [
     'graph.hits.hits.%'                                     => '%s hits',
     'graph.hits.misses.%'                                   => '%s misses',
     'graph.hits.blacklist.%'                                => '%s blacklist',
-];
+);

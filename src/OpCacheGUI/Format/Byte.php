@@ -32,7 +32,7 @@ class Byte
      */
     public function format($size, $decimals = 2)
     {
-        $units = ['B', 'KB', 'MB', 'GB'];
+        $units = array('B', 'KB', 'MB', 'GB');
         $position = 0;
 
         do {
